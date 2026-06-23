@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ยุติการให้บริการ - ระบบบัตรคิวรถขนส่งสินค้า GR.ST007</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -25,6 +25,7 @@
             margin: 0; 
             padding: 0; 
             font-family: 'Plus Jakarta Sans', 'Sarabun', sans-serif; 
+            -webkit-tap-highlight-color: transparent; /* ลบแถบไฮไลต์สีฟ้าเวลาแตะปุ่มบนมือถือ */
         }
         
         body { 
@@ -35,7 +36,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 1.5rem;
+            padding: 1rem; /* ลดระยะขอบนอกลงเล็กน้อย เพื่อเพิ่มพื้นที่ให้ตัวการ์ดบนหน้าจอเล็ก */
         }
 
         /* --- การ์ดข้อความหลัก --- */
@@ -43,9 +44,9 @@
             background: var(--card-bg);
             max-width: 550px;
             width: 100%;
-            padding: 2.5rem 2rem;
+            padding: 2rem 1.25rem; /* ปรับลดพื้นที่ Padding บนมือถือไม่ให้บีบข้อความแน่นเกินไป */
             border-radius: 24px; 
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.03);
             border: 1px solid rgba(226, 232, 240, 0.8);
             text-align: center;
             position: relative;
@@ -65,63 +66,66 @@
 
         /* --- ส่วนของไอคอน --- */
         .icon-wrapper {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
+            font-size: 3.5rem; /* ปรับไอคอนเล็กลงเล็กน้อยให้รับกับจอภาพมือถือ */
+            margin-bottom: 1.2rem;
             animation: pulse 2s infinite ease-in-out;
             display: inline-block;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+            50% { transform: scale(1.06); }
             100% { transform: scale(1); }
         }
 
         /* --- หัวข้อและรายละเอียด --- */
         h1 {
-            font-size: 1.6rem;
+            font-size: 1.35rem; /* ขนาดตัวอักษรกำลังพอดีสำหรับสมาร์ทโฟนแนวตั้ง */
             font-weight: 800;
             color: var(--dark);
             letter-spacing: -0.5px;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.6rem;
             line-height: 1.4;
         }
 
         .subtitle {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: var(--primary);
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .description {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
             line-height: 1.6;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            word-break: break-word;
         }
 
         /* --- กล่องข้อมูลติดต่อกลับ --- */
         .contact-box {
             background-color: var(--warning-light);
             color: #92400e;
-            padding: 1.2rem;
+            padding: 1rem;
             border-radius: 16px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border: 1px solid #fde68a;
             text-align: left;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .contact-box p {
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px dashed rgba(245, 158, 11, 0.3);
-            padding-bottom: 0.4rem;
+            align-items: flex-start;
+            border-bottom: 1px dashed rgba(245, 158, 11, 0.25);
+            padding-bottom: 0.5rem;
+            gap: 8px;
         }
 
         .contact-box p:last-child {
@@ -133,20 +137,46 @@
         .contact-box span {
             font-weight: 700;
             color: var(--dark);
+            text-align: right;
+        }
+
+        /* --- ปุ่มกดโทรออกด่วนสำหรับมือถือ --- */
+        .call-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2);
+            transition: transform 0.1s ease;
+        }
+        .call-btn:active {
+            transform: scale(0.98);
         }
 
         /* --- ส่วนท้ายหน้าเว็บ --- */
         footer {
-            margin-top: 1.5rem;
-            font-size: 0.8rem;
+            margin-top: 1.2rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             font-weight: 500;
+            text-align: center;
         }
 
-        /* --- ปรับแต่งเมื่อเปิดบนจอใหญ่ --- */
-        @media (min-width: 768px) {
-            h1 { font-size: 1.8rem; }
-            .maintenance-card { padding: 3rem 2.5rem; }
+        /* --- การปรับขนาดสำหรับหน้าจอขนาดใหญ่ (Tablet/PC) --- */
+        @media (min-width: 480px) {
+            h1 { font-size: 1.5rem; }
+            .maintenance-card { padding: 2.5rem 2rem; }
+            .icon-wrapper { font-size: 4rem; }
+            .contact-box { font-size: 0.9rem; padding: 1.2rem; }
         }
     </style>
 </head>
@@ -159,16 +189,20 @@
         <div class="subtitle">ระบบบัตรคิวรถขนส่งสินค้า GR.ST007</div>
         
         <p class="description">
-            ขณะนี้ระบบบัตรคิวรถขนส่งสินค้า GR.ST007 ได้ทำการยุติการให้บริการผ่านช่องทางนี้ หรือมีการเปลี่ยนแปลงระบบบริหารจัดการคิวรูปแบบใหม่
+            ขณะนี้ระบบบัตรคิวรถขนส่งสินค้า GR.ST007 ได้ทำการยุติการให้บริการผ่านช่องทางออนไลน์นี้แล้ว หรืออาจมีการเปลี่ยนแปลงรูปแบบการบริหารจัดการคิวรับสินค้าใหม่ภายในสาขา
         </p>
 
         <div class="contact-box">
-            <p>📍 สถานที่: <span>Makro Nakhon Ratchasima 1</span></p>
-            <p>📞 แผนกประสานงาน: <span>แผนก GR</span></p>
-            <p>☎️ เบอร์โทรศัพท์: <span>044-008454 ต่อ 175</span></p>
+            <p>📍   : <span>Makro Nakhon Ratchasima1</span></p>
+            <p>🤝   : <span>แผนก GR</span></p>
+            <p>☎️   : <span>044-008454 ต่อ 175</span></p>
         </div>
+
+        <a href="tel:044008454,175" class="call-btn">
+            โทรติดต่อแผนก GR
+        </a>
         
-        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+        <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">
             ขออภัยในความไม่สะดวกมา ณ ที่นี้
         </p>
     </div>
