@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการคิวรถ GR.ST7</title>
+    <title>ยุติการให้บริการ - ระบบบัตรคิวรถขนส่งสินค้า GR.ST007</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,12 +15,9 @@
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --success: #10b981;
-            --success-light: #ecfdf5;
+            --dark: #1e293b;
             --warning: #f59e0b;
             --warning-light: #fffbeb;
-            --dark: #1e293b;
-            --info: #06b6d4;
         }
 
         * { 
@@ -34,436 +31,151 @@
             background-color: var(--bg); 
             color: var(--text-main); 
             min-height: 100vh;
-            padding-bottom: 2rem;
-        }
-        
-        header { 
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: #ffffff; 
-            padding: 1.5rem 1.2rem; 
-            text-align: center; 
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-        }
-        header h1 { font-size: 1.3rem; font-weight: 800; }
-
-        #toast {
-            visibility: hidden;
-            min-width: 320px; max-width: 90%; background-color: var(--dark); color: #fff;
-            text-align: center; border-radius: 16px; padding: 16px 20px; position: fixed;
-            z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 0.95rem;
-            font-weight: 500; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
-            transition: all 0.3s ease;
-        }
-        #toast.show { visibility: visible; animation: slideup 0.4s ease forwards, slidedown 0.4s ease 3.6s forwards; }
-        #toast.new-queue { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; }
-        @keyframes slideup { from { bottom: 10px; opacity: 0; } to { bottom: 30px; opacity: 1; } }
-        @keyframes slidedown { from { bottom: 30px; opacity: 1; } to { bottom: 10px; opacity: 0; } }
-
-        .card { 
-            background: var(--card-bg); padding: 1.5rem; border-radius: 20px; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.04); 
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        .card h2 { margin-bottom: 1.2rem; color: var(--dark); font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 8px;}
-        
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group input { 
-            width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); border-radius: 12px; font-size: 1rem; 
-            background-color: #f8fafc; transition: all 0.2s ease; color: var(--text-main);
-        }
-        .form-group input:focus { outline: none; border-color: var(--primary); background-color: #fff; }
-
-        button { 
-            padding: 0.9rem 1.2rem; background-color: var(--primary); color: #fff; border: none; border-radius: 14px; 
-            font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: inline-flex; justify-content: center; align-items: center; gap: 0.5rem;
-            width: 100%;
-        }
-        button:hover { background-color: var(--primary-dark); transform: translateY(-1px); }
-
-        .admin-container { max-width: 1200px; margin: 1rem auto; padding: 0 1rem; }
-        
-        .admin-header-panel { 
-            background-color: var(--dark); 
-            color: #fff; 
-            padding: 1.2rem; 
-            display: flex; 
+            display: flex;
             flex-direction: column;
-            gap: 12px;
-            border-radius: 16px; 
-            margin-bottom: 1.2rem; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
         }
-        .admin-header-panel h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.3px; }
-        
-        .admin-top-controls { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; }
-        .admin-top-controls button { font-size: 0.85rem; padding: 0.55rem 0.9rem; border-radius: 10px; width: auto; flex: 1; min-width: 105px; }
 
-        .btn-clear { background-color: #ef4444; }
-        .btn-clear:hover { background-color: #dc2626; }
-        .btn-toggle-view { background-color: #0284c7; }
-        .btn-toggle-view:hover { background-color: #0369a1; }
-        .btn-toggle-view.active { background-color: var(--success); }
-        .btn-logout { background-color: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); }
-        
-        .auth-box { max-width: 400px; margin: 4rem auto; text-align: center; padding: 2rem 1.5rem; }
+        /* --- การ์ดข้อความหลัก --- */
+        .maintenance-card {
+            background: var(--card-bg);
+            max-width: 550px;
+            width: 100%;
+            padding: 2.5rem 2rem;
+            border-radius: 24px; 
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-        /* ปรับ grid เป็น 3 คอลัมน์เพื่อให้ปุ่มกระจายตัวสวยงามขึ้นหลังถอดย้ายท้ายออก */
-        .admin-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.4rem; width: 100%; margin-top: 0.8rem; }
-        .btn-act { padding: 0.6rem; font-size: 0.85rem; border-radius: 10px; text-align: center; width: auto; font-weight: 700; }
-        .btn-call { background-color: var(--success); }
-        .btn-call:hover { background-color: #059669; }
-        .btn-done { background-color: #0284c7; }
-        .btn-done:hover { background-color: #0369a1; }
-        .btn-cancel { background-color: #64748b; }
-        .btn-cancel:hover { background-color: #475569; }
+        /* แถบสีแดงตกแต่งด้านบน */
+        .maintenance-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
 
-        .queue-cards-container { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
-        .queue-item-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem; position: relative; border-top: 5px solid var(--warning); }
-        .queue-item-card.serving { border-top-color: var(--success); background-color: var(--success-light); }
-        .queue-item-card.done { border-top-color: #94a3b8; background-color: #f8fafc; opacity: 0.75; }
-        .queue-item-card.cancel { border-top-color: #cbd5e1; background-color: #f8fafc; opacity: 0.5; text-decoration: line-through; }
-        
-        .card-row-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border); padding-bottom: 0.6rem; margin-bottom: 0.6rem; }
-        .card-q-num { font-size: 1.6rem; font-weight: 900; color: var(--primary); }
-        .card-status-badge { padding: 0.3rem 0.6rem; font-size: 0.75rem; font-weight: 700; border-radius: 8px; color: white; }
-        .badge-waiting { background-color: var(--warning); }
-        .badge-serving { background-color: var(--success); }
-        .badge-done { background-color: #64748b; }
-        .badge-cancel { background-color: #94a3b8; }
-        
-        .card-details p { font-size: 0.9rem; color: #475569; margin-bottom: 0.3rem; text-align: left; line-height: 1.5; }
-        .card-details b { color: var(--dark); }
+        /* --- ส่วนของไอคอน --- */
+        .icon-wrapper {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite ease-in-out;
+            display: inline-block;
+        }
 
-        .table-responsive { display: none; width: 100%; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 1rem; background-color: #fff; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        th, td { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border); }
-        th { background-color: #f8fafc; color: #475569; font-weight: 700; border-bottom: 2px solid var(--border); }
-        tr.tr-serving { background-color: var(--success-light); }
-        tr.tr-done { background-color: #f8fafc; opacity: 0.75; }
-        tr.tr-cancel { background-color: #f8fafc; opacity: 0.5; text-decoration: line-through; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
 
+        /* --- หัวข้อและรายละเอียด --- */
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        /* --- กล่องข้อมูลติดต่อกลับ --- */
+        .contact-box {
+            background-color: var(--warning-light);
+            color: #92400e;
+            padding: 1.2rem;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            border: 1px solid #fde68a;
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-box p {
+            margin-bottom: 0.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed rgba(245, 158, 11, 0.3);
+            padding-bottom: 0.4rem;
+        }
+
+        .contact-box p:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .contact-box span {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* --- ส่วนท้ายหน้าเว็บ --- */
+        footer {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* --- ปรับแต่งเมื่อเปิดบนจอใหญ่ --- */
         @media (min-width: 768px) {
-            .admin-header-panel { flex-direction: row; justify-content: space-between; align-items: center; padding: 1.5rem; }
-            .admin-top-controls { width: auto; flex-wrap: nowrap; }
-            .admin-top-controls button { flex: none; }
-        }
-
-        @media (min-width: 850px) {
-            .queue-cards-container { display: none; }
-            .table-responsive { display: block; }
-            .admin-actions { display: flex; gap: 0.4rem; margin-top: 0; }
-            .btn-act { padding: 0.45rem 0.8rem; font-size: 0.8rem; }
+            h1 { font-size: 1.8rem; }
+            .maintenance-card { padding: 3rem 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>ระบบจัดการคิวรถขนส่งสินค้า</h1>
-    </header>
+    <div class="maintenance-card">
+        <div class="icon-wrapper">🛑</div>
+        
+        <h1>ประกาศยุติการให้บริการ<br>ระบบบัตรคิวออนไลน์</h1>
+        <div class="subtitle">ระบบบัตรคิวรถขนส่งสินค้า GR.ST007</div>
+        
+        <p class="description">
+            ขณะนี้ระบบบัตรคิวรถขนส่งสินค้า GR.ST007 ได้ทำการยุติการให้บริการผ่านช่องทางนี้ หรือมีการเปลี่ยนแปลงระบบบริหารจัดการคิวรูปแบบใหม่
+        </p>
 
-    <div id="toast">แจ้งเตือน</div>
-
-    <div class="admin-container">
-        <div id="admin-auth-panel" class="card auth-box">
-            <p style="font-size: 2rem; margin-bottom: 0.5rem;">🔒</p>
-            <h2>ผู้ดูแลระบบ (Admin)</h2>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1.5rem;">กรุณากรอกรหัสผ่านเพื่อเข้าใช้งานบอร์ดควบคุมคิว</p>
-            <div class="form-group">
-                <input type="password" id="admin-pass" style="text-align: center;" placeholder="กรอกรหัสผ่านเข้าสู่ระบบ">
-            </div>
-            <button onclick="loginAdmin()">เข้าสู่ระบบ Dashboard</button>
+        <div class="contact-box">
+            <p>📍 สถานที่: <span>Makro Nakhon Ratchasima 1</span></p>
+            <p>📞 แผนกประสานงาน: <span>แผนก GR</span></p>
+            <p>☎️ เบอร์โทรศัพท์: <span>044-008454 ต่อ 175</span></p>
         </div>
-
-        <div id="admin-dashboard" style="display: none;">
-            <div class="admin-header-panel">
-                <h1>Admin Dashboard</h1>
-                <div class="admin-top-controls">
-                    <button class="btn-clear" onclick="clearAllQueues()">ล้างคิวทั้งหมด</button>
-                    <button id="btn-toggle-view" class="btn-toggle-view" onclick="toggleQueueView()">แสดงคิวทั้งหมด</button>
-                    <button class="btn-logout" onclick="logoutAdmin()">ออกจากระบบ</button>
-                </div>
-            </div>
-            
-            <div class="card">
-                <h2 id="panel-title">📋 รายการคิวรถขนส่ง(คิวคงค้าง)</h2>
-                
-                <div id="mobile-queue-cards" class="queue-cards-container">
-                    <p style="text-align:center; color:var(--text-muted); padding:1rem;">กำลังโหลดข้อมูล...</p>
-                </div>
-
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>คิว</th>
-                                <th>คนขับ / บริษัท / เวลา</th>
-                                <th>เบอร์โทร</th>
-                                <th>ข้อมูลรถและสินค้า</th>
-                                <th>สถานะ</th>
-                                <th>การจัดการคิว</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pc-queue-tbody">
-                            <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">กำลังโหลดข้อมูล...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        
+        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+            ขออภัยในความไม่สะดวกมา ณ ที่นี้
+        </p>
     </div>
 
-    <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwI2TPaBIILRA4A3fxQm71XNJIYNmpjDXRqXtSitA8H7-NIsqZAKdSC6D3WtwOiPmMS/exec"; 
-        const ADMIN_PASSWORD = "grkorat007"; 
+    <footer>
+        &copy; ระบบบัตรคิวรถขนส่งสินค้า GR.ST007
+    </footer>
 
-        let previousQueuesCount = -1; 
-        let previousQueuesList = [];  
-        let showAllQueues = false;     
-
-        function formatThaiDate(dateStr) {
-            if (!dateStr || dateStr === "-") return "-";
-            try {
-                const d = new Date(dateStr);
-                if (isNaN(d.getTime())) return dateStr; 
-                const months = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-                const date = d.getDate();
-                const month = months[d.getMonth()];
-                const year = d.getFullYear() + 543; 
-                const hours = String(d.getHours()).padStart(2, '0');
-                const minutes = String(d.getMinutes()).padStart(2, '0');
-                return `${date} ${month} ${year} - ${hours}:${minutes} น.`;
-            } catch (e) { return dateStr; }
-        }
-
-        function playNotificationSound(type) {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (type === 'admin') {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
-                    gain.gain.setValueAtTime(1.0, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-                    osc.connect(gain); gain.connect(audioCtx.destination);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-                }
-            } catch (e) { console.error(e); }
-        }
-
-        function showToast(message, type = '') {
-            const x = document.getElementById("toast");
-            x.innerText = message;
-            x.className = "show";
-            if (type === 'new-queue') x.className = "show new-queue";
-            setTimeout(function(){ x.className = ""; }, 5000); 
-        }
-
-        function toggleQueueView() {
-            showAllQueues = !showAllQueues;
-            const btn = document.getElementById('btn-toggle-view');
-            const title = document.getElementById('panel-title');
-            if (showAllQueues) {
-                btn.innerText = "แสดงคิวคงค้าง";
-                btn.classList.add('active');
-                title.innerText = "📋 รายการคิวรถขนส่ง(คิวทั้งหมด)";
-                showToast("กำลังแสดงคิวทั้งหมดรวมคิวที่เสร็จสิ้น/ยกเลิก");
-            } else {
-                btn.innerText = "แสดงคิวทั้งหมด";
-                btn.classList.remove('active');
-                title.innerText = "📋 รายการคิวรถขนส่ง(คิวคงค้าง)";
-                showToast("กำลังแสดงเฉพาะคิวที่ยังค้างอยู่ในระบบ");
-            }
-            fetchData();
-        }
-
-        function fetchData() {
-            if (sessionStorage.getItem('isAdmin') !== 'true') return;
-
-            fetch(GOOGLE_SCRIPT_URL)
-            .then(res => res.json())
-            .then(data => {
-                const activeQueues = data.queues.filter(q => q.status !== 'done' && q.status !== 'cancel');
-                
-                if (previousQueuesCount !== -1) {
-                    const newRegistrations = activeQueues.filter(currentQ => {
-                        const currentNum = currentQ.queue_number || currentQ["คิว"];
-                        return !previousQueuesList.some(prevQ => (prevQ.queue_number || prevQ["คิว"]) === currentNum);
-                    });
-
-                    if (newRegistrations.length > 0) {
-                        const latestQ = newRegistrations[newRegistrations.length - 1];
-                        const qNum = latestQ.queue_number || latestQ["คิว"] || "ใหม่";
-                        const qName = latestQ.fullname || latestQ["ชื่อ-นามสกุล"] || "ผู้ใช้บริการ";
-                        playNotificationSound('admin'); 
-                        showToast(`🔔 มีผู้จองคิวใหม่เข้ามา! หมายเลข: ${qNum} (${qName})`, 'new-queue');
-                    }
-                }
-
-                previousQueuesCount = activeQueues.length;
-                previousQueuesList = activeQueues;
-
-                if (showAllQueues) {
-                    renderAdminUI(data.queues);
-                } else {
-                    renderAdminUI(activeQueues);
-                }
-            })
-            .catch(err => console.error("Error connecting server:", err));
-        }
-
-        function renderAdminUI(queues) {
-            const mobileContainer = document.getElementById('mobile-queue-cards');
-            const pcTbody = document.getElementById('pc-queue-tbody');
-
-            if (queues.length === 0) {
-                const emptyHTML = `<div style="text-align:center; color:var(--text-muted); padding:2rem 0; width:100%; font-weight:500;">ไม่มีรายการคิวแสดงในขณะนี้</div>`;
-                mobileContainer.innerHTML = emptyHTML;
-                pcTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:1.5rem;">ไม่มีรายการคิวแสดงในขณะนี้</td></tr>`;
-                return;
-            }
-
-            mobileContainer.innerHTML = "";
-            pcTbody.innerHTML = "";
-            
-            queues.forEach(q => {
-                const queueNumber = q.queue_number || q["คิว"] || "ไม่ระบุ";
-                const fullname    = q.fullname || q["ชื่อ-นามสกุล"] || "ไม่ระบุ";
-                const phone       = q.phone || q["เบอร์โทรศัพท์"] || "ไม่ระบุ";
-                const company     = q.company || q["บริษัท"] || "ไม่ระบุ";
-                const carType     = q.car_type || q["ประเภทรถ"] || "ไม่ระบุ";
-                const licenseId   = q.license_id || q["ทะเบียน"] || "ไม่ระบุ";
-                const product     = q.product || q["สินค้า"] || "ไม่ระบุ";
-                const quantity    = q.quantity || q["จำนวนสินค้า"] || "";
-                const currentStatus = q.status || q["สถานะคิว"] || "waiting";
-                const rawTime     = q.time || q.timestamp || "-"; 
-                const formattedTime = formatThaiDate(rawTime);
-
-                let statusLabel = 'รอเรียกคิว';
-                let badgeClass = 'badge-waiting';
-                let rowModifierClass = '';
-
-                if (currentStatus === 'serving') {
-                    statusLabel = 'กำลังบริการ';
-                    badgeClass = 'badge-serving';
-                    rowModifierClass = 'serving';
-                } else if (currentStatus === 'done') {
-                    statusLabel = 'เสร็จสิ้น';
-                    badgeClass = 'badge-done';
-                    rowModifierClass = 'done';
-                } else if (currentStatus === 'cancel') {
-                    statusLabel = 'ยกเลิก';
-                    badgeClass = 'badge-cancel';
-                    rowModifierClass = 'cancel';
-                }
-
-                const isFinished = currentStatus === 'done' || currentStatus === 'cancel';
-                
-                // ถอดปุ่มย้ายท้ายออกเรียบร้อยแล้ว
-                const actionsHTML = isFinished ? `<span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">สิ้นสุดขั้นตอนแล้ว</span>` : `
-                    <button class="btn-act btn-call" onclick="controlQueue('${q.id}', 'call')">เรียกคิว</button>
-                    <button class="btn-act btn-done" onclick="controlQueue('${q.id}', 'done')">เสร็จสิ้น</button>
-                    <button class="btn-act btn-cancel" onclick="controlQueue('${q.id}', 'cancel')">ยกเลิก</button>
-                `;
-
-                const card = document.createElement('div');
-                card.className = `queue-item-card ${rowModifierClass}`;
-                card.innerHTML = `
-                    <div class="card-row-header">
-                        <span class="card-q-num">${queueNumber}</span>
-                        <span class="card-status-badge ${badgeClass}">${statusLabel}</span>
-                    </div>
-                    <div class="card-details">
-                        <p><b>คนขับ:</b> ${fullname} | <b>โทร:</b> ${phone}</p>
-                        <p><b>บริษัท:</b> ${company}</p>
-                        <p><b>รถ:</b> ${carType} (ทะเบียน: <span style="color:var(--primary); font-weight:700;">${licenseId}</span>)</p>
-                        <p><b>สินค้า:</b> ${product} ${quantity ? '(' + quantity + ')' : ''}</p>
-                        <p style="font-size:0.8rem; margin-top:4px; color:var(--text-muted);"><b>เวลารับคิว:</b> ${formattedTime}</p>
-                    </div>
-                    <div class="admin-actions">${actionsHTML}</div>
-                `;
-                mobileContainer.appendChild(card);
-
-                const tr = document.createElement('tr');
-                if (rowModifierClass) tr.className = `tr-${rowModifierClass}`;
-                tr.innerHTML = `
-                    <td style="font-size:1.3rem; font-weight:800; color:var(--primary);">${queueNumber}</td>
-                    <td>
-                        <b>${fullname}</b><br>
-                        <span style="font-size:0.8rem; color:var(--text-main);">${company}</span><br>
-                        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:500;">⏱️ ${formattedTime}</span>
-                    </td>
-                    <td>${phone}</td>
-                    <td>${carType} / <span style="color:var(--primary); font-weight:700;">${licenseId}</span><br><span style="font-size:0.75rem; color:var(--text-muted);">สินค้า: ${product} ${quantity ? '(' + quantity + ')' : ''}</span></td>
-                    <td><span class="card-status-badge ${badgeClass}">${statusLabel}</span></td>
-                    <td><div class="admin-actions">${actionsHTML}</div></td>
-                `;
-                pcTbody.appendChild(tr);
-            });
-        }
-
-        function controlQueue(id, action) {
-            let msg = "คุณต้องการดำเนินการกับคิวนี้ใช่หรือไม่?";
-            if (action === 'call') msg = "ต้องการเรียกคิวนี้เข้าจุดบริการใช่หรือไม่?";
-            if (action === 'done') msg = "ยืนยันการเสร็จสิ้นบริการคิวนี้ใช่หรือไม่?";
-            if (action === 'cancel') msg = "❗ ยืนยันการลบคิวนี้ออกจากระบบใช่หรือไม่?";
-            
-            if (confirm(msg)) {
-                showToast("⏳ กำลังส่งคำสั่งควบคุม...");
-                fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ id: id, action: action })
-                }).then(() => {
-                    showToast("✅ ดำเนินการสำเร็จ");
-                    setTimeout(fetchData, 1000);
-                });
-            }
-        }
-
-        function clearAllQueues() {
-            if (confirm("🚨 เตือนขั้นวิกฤต!\nคุณแน่ใจใช่ไหมที่จะลบข้อมูลคิวรถทุกคิวออกจากระบบอย่างถาวร?")) {
-                showToast("🧹 กำลังเคลียร์ฐานข้อมูล...");
-                fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'clear-all' })
-                }).then(() => {
-                    showToast("🧹 ล้างคิวทั้งหมดสำเร็จ!");
-                    previousQueuesCount = 0;
-                    previousQueuesList = [];
-                    setTimeout(() => { fetchData(); }, 1000);
-                });
-            }
-        }
-
-        function loginAdmin() {
-            if (document.getElementById('admin-pass').value === ADMIN_PASSWORD) {
-                sessionStorage.setItem('isAdmin', 'true');
-                document.getElementById('admin-auth-panel').style.display = 'none';
-                document.getElementById('admin-dashboard').style.display = 'block';
-                showToast("🔓 เข้าสู่ระบบแอดมินแล้ว");
-                fetchData();
-                setInterval(fetchData, 5000);
-            } else {
-                showToast("❌ รหัสผ่านไม่ถูกต้อง");
-            }
-        }
-
-        function logoutAdmin() {
-            sessionStorage.removeItem('isAdmin');
-            location.reload();
-        }
-
-        if (sessionStorage.getItem('isAdmin') === 'true') {
-            document.getElementById('admin-auth-panel').style.display = 'none';
-            document.getElementById('admin-dashboard').style.display = 'block';
-            fetchData();
-            setInterval(fetchData, 5000);
-        }
-    </script>
 </body>
 </html>
